@@ -36,22 +36,22 @@ table inet proxy_rules {
 	chain prerouting {
 		type filter hook prerouting priority mangle; policy accept;
 		meta mark 0x00000001 goto proxy
-		ct direction reply return
-		ip daddr @lan_ipv4 return
-		ip6 daddr @lan_ipv6 return
-		ip daddr @cn_ipv4 return
-		ip6 daddr @cn_ipv6 return
+		ip daddr @lan_ipv4 accept
+		ip6 daddr @lan_ipv6 accept
+		ip daddr @cn_ipv4 accept
+		ip6 daddr @cn_ipv6 accept
+		ct direction reply accept
 		goto proxy
 	}
 
 	chain output {
 		type route hook output priority mangle; policy accept;
-		meta mark 0x0000000a return
-		ct direction reply return
-		ip daddr @lan_ipv4 return
-		ip6 daddr @lan_ipv6 return
-		ip daddr @cn_ipv4 return
-		ip6 daddr @cn_ipv6 return
+		meta mark 0x0000000a accept
+		ip daddr @lan_ipv4 accept
+		ip6 daddr @lan_ipv6 accept
+		ip daddr @cn_ipv4 accept
+		ip6 daddr @cn_ipv6 accept
+		ct direction reply accept
 		meta l4proto { tcp, udp } meta mark set 0x00000001 accept
 	}
 
